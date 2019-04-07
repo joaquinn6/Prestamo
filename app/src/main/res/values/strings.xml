@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Prestamo</string>
+    <string-array name="sexos">
+        <item>Femenino</item>
+        <item>Masculino</item>
+    </string-array>
+
+    <string-array name="intereses">
+        <item>"15"</item>
+        <item>"20"</item>
+        <item>"25"</item>
+    </string-array>
+</resources>
