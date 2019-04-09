@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Borrar" android:id="@+id/mncBorrar"></item>
+    <item android:title="Copiar" android:id="@+id/mncCopiar"></item>
+</menu>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Prestamo</string>
+    <string name="app_name">Prestamos</string>
     <string-array name="sexos">
         <item>Femenino</item>
         <item>Masculino</item>
