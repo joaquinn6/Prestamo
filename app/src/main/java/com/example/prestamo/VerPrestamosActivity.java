@@ -1,5 +1,6 @@
 package com.example.prestamo;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,10 @@ public class VerPrestamosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActionBar bar = getSupportActionBar();
+        bar.setSubtitle("Ver Prestamo");
+
         setContentView(R.layout.activity_ver_prestamos);
         if(Datos.prestamos.size()!=0){
             llenarPrestamo();

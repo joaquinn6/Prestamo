@@ -1,6 +1,7 @@
 package com.example.prestamo;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,6 +26,11 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActionBar bar = getSupportActionBar();
+        bar.setSubtitle("Ingresar Credito");
+
+
         setContentView(R.layout.activity_second);
         final Spinner spClientes = findViewById(R.id.spUsuarios);
         Bundle extras =getIntent().getExtras();

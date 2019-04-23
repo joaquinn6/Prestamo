@@ -4,6 +4,6 @@
     <item android:title="Nuevo Prestamo" android:id="@+id/mnNuevoPrestamo" app:showAsAction="always"></item>
     <item android:title="Nuevo usuario" android:id="@+id/mnNuevoUsuario" android:icon="@drawable/ic_user" app:showAsAction="always"></item>
     <item android:title="Ver Cliente" android:id="@+id/mnVerCliente" app:showAsAction="never"></item>
-    <item android:title="Ver Prestamo" android:id="@+id/mnVerPrestamo" ></item>
+    <item android:title="Ver Prestamo" android:id="@+id/mnVerPrestamo"></item>
     <item android:title="Acerca De" android:id="@+id/mnAcercaDe"></item>
 </menu>
