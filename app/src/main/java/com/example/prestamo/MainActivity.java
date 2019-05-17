@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,11 +20,18 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBar bar = getSupportActionBar();
         bar.setSubtitle("Ingresar Cliente");
+    }
 
-        Button btnContinuar=findViewById(R.id.btnSiguiente);
-        btnContinuar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_yes_no, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.mnAceptar:
                 EditText txtNombre= findViewById(R.id.etNombre);
                 EditText txtTelefono= findViewById(R.id.etTelefono);
                 EditText txtCedula= findViewById(R.id.etCedula);
@@ -55,16 +64,11 @@ public class MainActivity extends AppCompatActivity {
                     setResult(RESULT_OK, intent);
                     finish();
                 }
-            }
-        });
-
-        Button btnCancelar = findViewById(R.id.btnCancelar);
-        btnCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.mnCancelar:
                 onBackPressed();
-            }
-        });
-
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

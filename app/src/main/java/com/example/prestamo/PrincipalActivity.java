@@ -16,7 +16,6 @@ public class PrincipalActivity extends AppCompatActivity {
 
     private static int NUSUARIO=7987;
     private static int NPRESTAMO=7988;
-    private static int ACERCADE=7989;
     private static int MCLIENTES=7990;
     private static int MPRESTAMO=7991;
 
@@ -43,19 +42,15 @@ public class PrincipalActivity extends AppCompatActivity {
                 intent=new Intent(this, MainActivity.class);
                 startActivityForResult(intent, NUSUARIO);
                 break;
-            case R.id.mnNuevoPrestamo:
-                intent =new Intent(this, SecondActivity.class);
-                startActivityForResult(intent, NPRESTAMO);
-                break;
             case R.id.mnAcercaDe:
                 Toast.makeText(this, "Electiva Android", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.mnVerCliente:
-                intent =new Intent(this, VerClienteActivity.class);
+                intent =new Intent(this, ListClienteActivity.class);
                 startActivityForResult(intent, MCLIENTES);
                 break;
             case R.id.mnVerPrestamo:
-                intent =new Intent(this, VerPrestamosActivity.class);
+                intent =new Intent(this, ListPrestamosActivity.class);
                 startActivityForResult(intent, MPRESTAMO);
                 break;
         }

@@ -208,27 +208,4 @@
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/btnSiguiente"
-        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Guardar"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/btnCancelar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Cancelar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnSiguiente"
-        android:textColor="@color/colorAccent"
-        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"/>
 </android.support.constraint.ConstraintLayout>

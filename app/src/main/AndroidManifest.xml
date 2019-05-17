@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VerPrestamosActivity"></activity>
+        <activity android:name=".ListClienteActivity"></activity>
+        <activity android:name=".ListPrestamosActivity" />
+        <activity android:name=".VerPrestamosActivity" />
         <activity android:name=".VerClienteActivity" />
         <activity android:name=".PrincipalActivity">
             <intent-filter>

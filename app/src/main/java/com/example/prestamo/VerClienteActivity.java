@@ -4,10 +4,15 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VerClienteActivity extends AppCompatActivity {
     public int indice=0;
@@ -21,46 +26,13 @@ public class VerClienteActivity extends AppCompatActivity {
         bar.setSubtitle("Ver Cliente");
 
         setContentView(R.layout.activity_ver_cliente);
-        if(Datos.clientes.size()!=0){
 
+
+        Bundle extras =getIntent().getExtras();
+
+        if(extras!=null){
+            indice=Integer.parseInt(extras.getString("indice"));
             LlenarCliente();
-
-        Button btnSiguiente= findViewById(R.id.btnSiguiente);
-        btnSiguiente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(indice==Datos.clientes.size()-1){
-                    Toast.makeText(VerClienteActivity.this, "LLego al fin", Toast.LENGTH_SHORT).show();
-                }else {
-                    indice=1+indice;
-                    LlenarCliente();
-                }
-            }
-        });
-        
-        Button btnAnterior= findViewById(R.id.btnAnterior);
-        btnAnterior.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(indice==0){
-                    Toast.makeText(VerClienteActivity.this, "Llego al inicio", Toast.LENGTH_SHORT).show();
-                }else{
-                    indice=indice-1;
-                    LlenarCliente();
-                }
-            }
-        });
-
-        Button btnNuevoPrestamo = findViewById(R.id.btnNuevoPrestamo);
-        btnNuevoPrestamo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(VerClienteActivity.this, SecondActivity.class);
-                intent.putExtra("indice", String.valueOf(indice));
-
-                startActivity(intent);
-            }
-        });
         }
     }
 
@@ -81,5 +53,24 @@ public class VerClienteActivity extends AppCompatActivity {
         tvOcupacion.setText(Datos.clientes.get(indice).getOcupacion());
         tvDireccion.setText(Datos.clientes.get(indice).getDireccion());
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.mnAgregar:
+                Intent intent = new Intent(VerClienteActivity.this, SecondActivity.class);
+                intent.putExtra("indice", String.valueOf(indice));
+
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
