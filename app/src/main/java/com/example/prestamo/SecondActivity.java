@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +25,14 @@ public class SecondActivity extends AppCompatActivity {
 
     private ArrayAdapter<String> adapter;
 
+    public Spinner spClientes;
+    public TextView tvMontoPagar;
+    public TextView tvMontoCuota;
+    public EditText dtpFecha;
+    public EditText dtpFechaFinal;
+    public EditText txtMontoCredito;
+    public EditText txtPlazos;
+    public Spinner spInteres;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,14 +42,14 @@ public class SecondActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_second);
-        final Spinner spClientes = findViewById(R.id.spUsuarios);
+        spClientes = findViewById(R.id.spUsuarios);
         Bundle extras =getIntent().getExtras();
         List<String> adaptador= new ArrayList<>();
 
         if(extras!=null){
             String cli;
             int indice = Integer.parseInt(extras.getString("indice"));
-            cli= Datos.clientes.get(indice).getNombre();
+            cli= Datos.clientes.get(indice).getNombre() +" "+ Datos.clientes.get(indice).getApelldio();
             adaptador.add(cli);
             adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, adaptador);
             spClientes.setAdapter(adapter);
@@ -52,17 +62,17 @@ public class SecondActivity extends AppCompatActivity {
                 spClientes.setAdapter(adapter);
             }
         }
-        final TextView tvMontoPagar = findViewById(R.id.tvMontoPagar);
-        final TextView tvMontoCuota = findViewById(R.id.tvMontoCuota);
-        final EditText dtpFecha = findViewById(R.id.etFecha);
-        final EditText dtpFechaFinal = findViewById(R.id.etFechaFinal);
+        tvMontoPagar = findViewById(R.id.tvMontoPagar);
+        tvMontoCuota = findViewById(R.id.tvMontoCuota);
+        dtpFecha = findViewById(R.id.etFecha);
+        dtpFechaFinal = findViewById(R.id.etFechaFinal);
         Calendar now= Calendar.getInstance();
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         dtpFecha.setText(formato.format(now.getTime()));
         now.add(Calendar.MONTH,+1);
         dtpFechaFinal.setText(formato.format(now.getTime()));
 
-        final EditText txtMontoCredito = findViewById(R.id.etMontoCredito);
+        txtMontoCredito = findViewById(R.id.etMontoCredito);
         txtMontoCredito.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -79,7 +89,7 @@ public class SecondActivity extends AppCompatActivity {
 
             }
         });
-        final EditText txtPlazos = findViewById(R.id.etPlazo);
+        txtPlazos = findViewById(R.id.etPlazo);
         txtPlazos.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -96,7 +106,7 @@ public class SecondActivity extends AppCompatActivity {
 
             }
         });
-        final Spinner spInteres = findViewById(R.id.spInteres);
+        spInteres = findViewById(R.id.spInteres);
         spInteres.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -106,43 +116,6 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
-
-
-        Button btnFinalizar=findViewById(R.id.btnSiguiente);
-        btnFinalizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(spClientes.getSelectedItemPosition()!=-1 && txtMontoCredito.getText().toString().length()!=0 && Integer.parseInt(txtMontoCredito.getText().toString())>0){
-                    Prestamos nuevo = new Prestamos();
-
-                    nuevo.setNombreCliente(spClientes.getSelectedItem().toString());
-                    nuevo.setMonto(Double.parseDouble(txtMontoCredito.getText().toString()));
-                    nuevo.setInteres(spInteres.getSelectedItem().toString());
-                    nuevo.setPlazo(Integer.parseInt(txtPlazos.getText().toString()));
-                    nuevo.setFechaInicio(dtpFecha.getText().toString());
-                    nuevo.setFechaFinal(dtpFechaFinal.getText().toString());
-                    nuevo.setMontoPagar(Double.parseDouble(tvMontoPagar.getText().toString()));
-                    nuevo.setMontoCuota(Double.parseDouble(tvMontoCuota.getText().toString()));
-
-                    Datos.prestamos.add(nuevo);
-
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }else{
-                    if(txtMontoCredito.getText().toString().length()==0 || Integer.parseInt(txtMontoCredito.getText().toString())==0)
-                        txtMontoCredito.setError("Monto mayos que 0");
-                }
-            }
-        });
-
-        Button btnCancelar = findViewById(R.id.btnCancelar);
-        btnCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
             }
         });
     }
@@ -183,5 +156,45 @@ public class SecondActivity extends AppCompatActivity {
         now.add(Calendar.MONTH,+plazo);
         EditText dtpFechaFinal = findViewById(R.id.etFechaFinal);
         dtpFechaFinal.setText(formato.format(now.getTime()));
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_yes_no, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.mnAceptar:
+                if(spClientes.getSelectedItemPosition()!=-1 && txtMontoCredito.getText().toString().length()!=0 && Integer.parseInt(txtMontoCredito.getText().toString())>0){
+                    Prestamos nuevo = new Prestamos();
+
+                    nuevo.setNombreCliente(spClientes.getSelectedItem().toString());
+                    nuevo.setMonto(Double.parseDouble(txtMontoCredito.getText().toString()));
+                    nuevo.setInteres(spInteres.getSelectedItem().toString());
+                    nuevo.setPlazo(Integer.parseInt(txtPlazos.getText().toString()));
+                    nuevo.setFechaInicio(dtpFecha.getText().toString());
+                    nuevo.setFechaFinal(dtpFechaFinal.getText().toString());
+                    nuevo.setMontoPagar(Double.parseDouble(tvMontoPagar.getText().toString()));
+                    nuevo.setMontoCuota(Double.parseDouble(tvMontoCuota.getText().toString()));
+
+                    Datos.prestamos.add(nuevo);
+
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }else{
+                    if(txtMontoCredito.getText().toString().length()==0 || Integer.parseInt(txtMontoCredito.getText().toString())==0)
+                        txtMontoCredito.setError("Monto mayor que 0");
+                }
+                break;
+            case R.id.mnCancelar:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

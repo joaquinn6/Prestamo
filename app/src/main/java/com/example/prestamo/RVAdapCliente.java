@@ -17,7 +17,7 @@ public class RVAdapCliente extends RecyclerView.Adapter<RVAdapCliente.ClienteHol
     private final OnItemClickListener onItemClickListener;
 
     public interface  OnItemClickListener{
-        void OnItemClick(int posicion);
+        void OnItemClick(int posicion, long id);
     }
 
     public RVAdapCliente(List<Cliente> clienteList, OnItemClickListener onItemClickListener){
@@ -62,11 +62,14 @@ public class RVAdapCliente extends RecyclerView.Adapter<RVAdapCliente.ClienteHol
 
             itemView.setOnClickListener(this);
 
+            ibEliminar.setOnClickListener(this);
+            ibEditar.setOnClickListener(this);
+
         }
 
         @Override
         public void onClick(View view) {
-            onItemClickListener.OnItemClick(getAdapterPosition());
+            onItemClickListener.OnItemClick(getAdapterPosition(), view.getId());
         }
     }
 }
