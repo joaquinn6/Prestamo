@@ -1,24 +1,34 @@
 package com.example.prestamo;
 
+import android.arch.persistence.room.Room;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.prestamo.adapters.AdapPrestamos;
+import com.example.prestamo.db.DbPrestamos;
 
 public class ListPrestamosActivity extends AppCompatActivity {
-
-    AdapPrestamos adapPrestamo;
-
+    private int indice;
+    private AdapPrestamos adapPrestamo;
+    private DbPrestamos db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_prestamos);
 
         ListView listPrestamos =  findViewById(R.id.listPrestamos);
+        db= Room.databaseBuilder(getApplicationContext(), DbPrestamos.class, "prestamos").allowMainThreadQueries().build();
 
-        adapPrestamo = new AdapPrestamos(this, R.layout.item_prestamos, Datos.prestamos);
+        Bundle extras =getIntent().getExtras();
+
+        if(extras!=null){
+            indice=Integer.parseInt(extras.getString("indice"));
+            adapPrestamo= new AdapPrestamos(this, R.layout.item_prestamos, db.prestamosDao().MostrarPrestamosPorId(indice));
+        }else{
+            adapPrestamo = new AdapPrestamos(this, R.layout.item_prestamos, db.prestamosDao().MostrarPrestamos());
+        }
+
         listPrestamos.setAdapter(adapPrestamo);
     }
 }

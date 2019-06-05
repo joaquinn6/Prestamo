@@ -1,5 +1,6 @@
 package com.example.prestamo;
 
+import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -7,30 +8,42 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
+
+import com.example.prestamo.adapters.RVAdapCliente;
+import com.example.prestamo.db.DbPrestamos;
+import com.example.prestamo.obj.Cliente;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListClienteActivity extends AppCompatActivity {
 
     private RVAdapCliente adapter;
-
+    private List<Cliente> clienteList= new ArrayList<>();
+    private DbPrestamos db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_cliente);
         final Intent[] intent = new Intent[1];
         RecyclerView rvCliente = findViewById(R.id.rvClientes);
+
+        db= Room.databaseBuilder(getApplicationContext(), DbPrestamos.class, "prestamos").allowMainThreadQueries().build();
+        clienteList.addAll(db.clienteDao().MostrarClientes());
+
         RVAdapCliente.OnItemClickListener onItemClickListener = new RVAdapCliente.OnItemClickListener() {
             @Override
             public void OnItemClick(final int posicion, long id) {
                 if(id==R.id.ibEliminar){
                     AlertDialog.Builder builder = new AlertDialog.Builder(ListClienteActivity.this);
                     builder.setTitle("Eliminando Cliente");
-                    builder.setMessage("Esta seguro que desea eliminar al usuario "+ Datos.clientes.get(posicion).getNombre());
+                    builder.setMessage("Esta seguro que desea eliminar al usuario "+ clienteList.get(posicion).getNombre());
                     builder.setNegativeButton("NO", null);
                     builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Datos.clientes.remove(posicion);
+                            db.clienteDao().Borrar(clienteList.get(posicion));
+                            clienteList.remove(posicion);
                             adapter.notifyDataSetChanged();
                         }
                     });
@@ -39,16 +52,20 @@ public class ListClienteActivity extends AppCompatActivity {
                     alert.show();
                 }else if(id==R.id.ibEditar){
                     intent[0] =new Intent(ListClienteActivity.this, MainActivity.class);
-                    intent[0].putExtra("indice", String.valueOf(posicion));
+                    intent[0].putExtra("indice", String.valueOf(clienteList.get(posicion).getId()));
                     startActivityForResult(intent[0], 1111);
+                }else if(id==R.id.ibVerPRestamos){
+                    intent[0] =new Intent(ListClienteActivity.this, ListPrestamosActivity.class);
+                    intent[0].putExtra("indice", String.valueOf(clienteList.get(posicion).getId()));
+                    startActivity(intent[0]);
                 }else{
                     intent[0] =new Intent(ListClienteActivity.this, VerClienteActivity.class);
-                    intent[0].putExtra("indice", String.valueOf(posicion));
+                    intent[0].putExtra("indice", String.valueOf(clienteList.get(posicion).getId()));
                     startActivity(intent[0]);
                 }
             }
         };
-        adapter=new RVAdapCliente(Datos.clientes, onItemClickListener);
+        adapter=new RVAdapCliente(clienteList, onItemClickListener);
         GridLayoutManager manager = new GridLayoutManager(this,1);
         rvCliente.setLayoutManager(manager);
         rvCliente.setAdapter(adapter);
@@ -61,7 +78,8 @@ public class ListClienteActivity extends AppCompatActivity {
 
         if (requestCode==1111){
             if(resultCode==RESULT_OK){
-
+                clienteList.removeAll(clienteList);
+                clienteList.addAll(db.clienteDao().MostrarClientes());
                 adapter.notifyDataSetChanged();
             }
         }

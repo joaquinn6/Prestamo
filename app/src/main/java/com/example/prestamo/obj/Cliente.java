@@ -1,6 +1,12 @@
-package com.example.prestamo;
+package com.example.prestamo.obj;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
+@Entity
 public class Cliente {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String nombre;
     private String apelldio;
     private String sexo;
@@ -9,6 +15,13 @@ public class Cliente {
     private String ocupacion;
     private String direccion;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getNombre() {
         return nombre;

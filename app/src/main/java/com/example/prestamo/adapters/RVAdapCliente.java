@@ -1,4 +1,4 @@
-package com.example.prestamo;
+package com.example.prestamo.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,12 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.prestamo.R;
+import com.example.prestamo.obj.Cliente;
+
 import java.util.List;
 
 
 public class RVAdapCliente extends RecyclerView.Adapter<RVAdapCliente.ClienteHolder> {
 
     List<Cliente> clienteList;
+
     private final OnItemClickListener onItemClickListener;
 
     public interface  OnItemClickListener{
@@ -51,6 +55,7 @@ public class RVAdapCliente extends RecyclerView.Adapter<RVAdapCliente.ClienteHol
         private TextView tvApellido;
         private ImageButton ibEditar;
         private ImageButton ibEliminar;
+        private  ImageButton ibMostrarPrestamos;
 
         public ClienteHolder(@NonNull View itemView){
             super(itemView);
@@ -59,12 +64,13 @@ public class RVAdapCliente extends RecyclerView.Adapter<RVAdapCliente.ClienteHol
             tvApellido=itemView.findViewById(R.id.tvApellido);
             ibEditar=itemView.findViewById(R.id.ibEditar);
             ibEliminar=itemView.findViewById(R.id.ibEliminar);
+            ibMostrarPrestamos=itemView.findViewById(R.id.ibVerPRestamos);
 
             itemView.setOnClickListener(this);
 
             ibEliminar.setOnClickListener(this);
             ibEditar.setOnClickListener(this);
-
+            ibMostrarPrestamos.setOnClickListener(this);
         }
 
         @Override

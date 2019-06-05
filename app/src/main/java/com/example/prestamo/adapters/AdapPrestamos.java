@@ -1,4 +1,4 @@
-package com.example.prestamo;
+package com.example.prestamo.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.example.prestamo.R;
+import com.example.prestamo.obj.Prestamos;
 
 import java.util.List;
 

@@ -74,6 +74,18 @@
                 style="@style/Widget.AppCompat.ImageButton"
                 android:background="@android:color/transparent"/>
 
+            <ImageButton
+                android:id="@+id/ibVerPRestamos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ibEditar"
+                app:layout_constraintEnd_toStartOf="@+id/ibEditar"
+                app:layout_constraintTop_toTopOf="@+id/ibEditar"
+                app:srcCompat="@drawable/ic_coin_of_dollar"
+                android:background="@android:color/transparent"/>
+            />
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 

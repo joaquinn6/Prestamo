@@ -1,19 +1,23 @@
 package com.example.prestamo;
 
+import android.arch.persistence.room.Room;
+import android.arch.persistence.room.RoomDatabase;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
+
+import com.example.prestamo.db.DbPrestamos;
+import com.example.prestamo.obj.Cliente;
 
 public class MainActivity extends AppCompatActivity {
-    public int indice=-1;
+    private int indice=-1;
+    private DbPrestamos db;
+    private Cliente actualizar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBar bar = getSupportActionBar();
         bar.setSubtitle("Ingresar Cliente");
 
+        db= Room.databaseBuilder(getApplicationContext(), DbPrestamos.class, "prestamos").allowMainThreadQueries().build();
         Bundle extras =getIntent().getExtras();
 
         if(extras!=null){
@@ -39,16 +44,17 @@ public class MainActivity extends AppCompatActivity {
         EditText tvOcupacion= findViewById(R.id.etOcupacion);
         EditText tvDireccion= findViewById(R.id.etDireccion);
 
-        tvNombre.setText(Datos.clientes.get(indice).getNombre());
-        tvApellido.setText(Datos.clientes.get(indice).getApelldio());
-        if(Datos.clientes.get(indice).getSexo().equals("Femenino"))
+        actualizar=db.clienteDao().MostrarClientePorId(indice);
+        tvNombre.setText(actualizar.getNombre());
+        tvApellido.setText(actualizar.getApelldio());
+        if(actualizar.getSexo().equals("Femenino"))
             tvSexo.setSelection(0);
         else
             tvSexo.setSelection(1);
-        tvTelefono.setText(Datos.clientes.get(indice).getNumero());
-        tvCedula.setText(Datos.clientes.get(indice).getCedula());
-        tvOcupacion.setText(Datos.clientes.get(indice).getOcupacion());
-        tvDireccion.setText(Datos.clientes.get(indice).getDireccion());
+        tvTelefono.setText(actualizar.getNumero());
+        tvCedula.setText(actualizar.getCedula());
+        tvOcupacion.setText(actualizar.getOcupacion());
+        tvDireccion.setText(actualizar.getDireccion());
 
     }
 
@@ -90,16 +96,17 @@ public class MainActivity extends AppCompatActivity {
                         nuevo.setDireccion(txtDireccion.getText().toString());
                         nuevo.setOcupacion(txtOcupacion.getText().toString());
 
-                        Datos.clientes.add(nuevo);
+                        db.clienteDao().Insertar(nuevo);
                     }else{
-                        Datos.clientes.get(indice).setNombre(txtNombre.getText().toString());
-                        Datos.clientes.get(indice).setApelldio(txtApellido.getText().toString());
-                        Datos.clientes.get(indice).setSexo(spSexo.getSelectedItem().toString());
-                        Datos.clientes.get(indice).setNumero(txtTelefono.getText().toString());
-                        Datos.clientes.get(indice).setCedula(txtCedula.getText().toString());
-                        Datos.clientes.get(indice).setDireccion(txtDireccion.getText().toString());
-                        Datos.clientes.get(indice).setOcupacion(txtOcupacion.getText().toString());
+                        actualizar.setNombre(txtNombre.getText().toString());
+                        actualizar.setApelldio(txtApellido.getText().toString());
+                        actualizar.setSexo(spSexo.getSelectedItem().toString());
+                        actualizar.setNumero(txtTelefono.getText().toString());
+                        actualizar.setCedula(txtCedula.getText().toString());
+                        actualizar.setDireccion(txtDireccion.getText().toString());
+                        actualizar.setOcupacion(txtOcupacion.getText().toString());
 
+                        db.clienteDao().Actualizar(actualizar);
                     }
 
                     Intent intent = new Intent();
