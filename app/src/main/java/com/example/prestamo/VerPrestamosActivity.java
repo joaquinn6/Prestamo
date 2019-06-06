@@ -27,7 +27,6 @@ import java.util.List;
 
 
 public class VerPrestamosActivity extends AppCompatActivity {
-    private String indice="";
     private int id=0;
     private PrestamoConClienteConPagos prestamoConClienteConPagos=new PrestamoConClienteConPagos();
     private DbPrestamos db;
@@ -44,9 +43,8 @@ public class VerPrestamosActivity extends AppCompatActivity {
         Bundle extras =getIntent().getExtras();
         ListView lvPagos = findViewById(R.id.lvPagos);
         if(extras!=null){
-            indice=extras.getString("indice");
             id=extras.getInt("id");
-            prestamoConClienteConPagos=db.prestamosDao().MostrarPojoTodo(indice,id);
+            prestamoConClienteConPagos=db.prestamosDao().MostrarPojoTodo(id);
             llenarPrestamo();
             adapter= new AdapPago(this, R.layout.item_pago, prestamoConClienteConPagos.getPagoList());
             lvPagos.setAdapter(adapter);
@@ -73,13 +71,13 @@ public class VerPrestamosActivity extends AppCompatActivity {
             }
             tvMontoCuota.setText(String.valueOf(total));
         }
-        tvMontoPagar.setText(prestamoConClienteConPagos.getPrestamoConCliente().getPrestamos().getMontoPagar().toString());
-        tvFechaFinal.setText(prestamoConClienteConPagos.getPrestamoConCliente().getPrestamos().getFechaFinal());
-        tvFecha.setText(prestamoConClienteConPagos.getPrestamoConCliente().getPrestamos().getFechaInicio());
-        tvPlazo.setText(String.valueOf(prestamoConClienteConPagos.getPrestamoConCliente().getPrestamos().getPlazo()));
-        tvInteres.setText(prestamoConClienteConPagos.getPrestamoConCliente().getPrestamos().getInteres());
-        tvMontoCredito.setText(prestamoConClienteConPagos.getPrestamoConCliente().getPrestamos().getMonto().toString());
-        tvNombreCliente.setText(prestamoConClienteConPagos.getPrestamoConCliente().getCliente().getNombre() + " "+ prestamoConClienteConPagos.getPrestamoConCliente().getCliente().getApelldio());
+        tvMontoPagar.setText(prestamoConClienteConPagos.getPrestamos().getMontoPagar().toString());
+        tvFechaFinal.setText(prestamoConClienteConPagos.getPrestamos().getFechaFinal());
+        tvFecha.setText(prestamoConClienteConPagos.getPrestamos().getFechaInicio());
+        tvPlazo.setText(String.valueOf(prestamoConClienteConPagos.getPrestamos().getPlazo()));
+        tvInteres.setText(prestamoConClienteConPagos.getPrestamos().getInteres());
+        tvMontoCredito.setText(prestamoConClienteConPagos.getPrestamos().getMonto().toString());
+        tvNombreCliente.setText(prestamoConClienteConPagos.getCliente().getNombre() + " "+ prestamoConClienteConPagos.getCliente().getApelldio());
     }
 
     @Override
@@ -104,6 +102,7 @@ public class VerPrestamosActivity extends AppCompatActivity {
 
                         Pago pago= new Pago();
                         pago.setMonto(Float.parseFloat(etCantidad.getText().toString()));
+                        pago.setIdPrestamo(prestamoConClienteConPagos.getPrestamos().getId());
                         try {
                             db.pagoDao().Insertar(pago);
                             prestamoConClienteConPagos.getPagoList().add(pago);

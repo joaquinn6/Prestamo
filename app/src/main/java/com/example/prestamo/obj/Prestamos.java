@@ -17,12 +17,8 @@ public class Prestamos {
     private String fechaFinal;
     private Double montoPagar;
     private Double montoCuota;
+    @ForeignKey(entity = Cliente.class, childColumns = "idCliente", parentColumns = "id", onDelete = CASCADE, onUpdate = CASCADE)
     private String cedulaCliente;
-    @ForeignKey(entity = Cliente.class,
-            childColumns = "idCliente",
-            parentColumns = "id",
-            onDelete = CASCADE, onUpdate = CASCADE)
-
 
     public Prestamos() {
     }

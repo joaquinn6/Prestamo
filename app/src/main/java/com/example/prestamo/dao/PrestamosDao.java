@@ -17,24 +17,12 @@ public interface PrestamosDao {
     @Insert
     void Insertar(Prestamos prestamos);
 
-    @Delete
-    void Eliminar(Prestamos prestamos);
-
-    @Update
-    void Actualizar(Prestamos prestamos);
-
-    @Query("select * from prestamos")
-    List<Prestamos> MostrarPrestamos();
-
-    @Query("select * from prestamos where cedulaCliente=:id")
-    List<Prestamos> MostrarPrestamosPorId(String id);
-
     @Query("select * from prestamos inner join cliente on cliente.cedula = prestamos.cedulaCliente")
     List<PrestamoConCliente> MostrarPojo();
 
     @Query("select * from prestamos inner join cliente on cliente.cedula = prestamos.cedulaCliente where cedulaCliente=:cedula")
     List<PrestamoConCliente> MostrarPojoCedula(String cedula);
 
-    @Query("select * from prestamos inner join cliente on cliente.cedula = prestamos.cedulaCliente where cedulaCliente=:cedula and id=:id")
-    PrestamoConClienteConPagos MostrarPojoTodo(String cedula, int id);
+    @Query("select * from cliente inner join prestamos on cliente.cedula = prestamos.cedulaCliente where prestamos.id=:id")
+    PrestamoConClienteConPagos MostrarPojoTodo(int id);
 }

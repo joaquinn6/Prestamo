@@ -10,7 +10,6 @@ import android.widget.ListView;
 
 import com.example.prestamo.adapters.AdapPrestamos;
 import com.example.prestamo.db.DbPrestamos;
-import com.example.prestamo.obj.Prestamos;
 import com.example.prestamo.pojo.PrestamoConCliente;
 
 import java.util.ArrayList;
@@ -46,7 +45,6 @@ public class ListPrestamosActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(ListPrestamosActivity.this,VerPrestamosActivity.class);
-                intent.putExtra("indice", prestamosList.get(position).getCliente().getCedula());
                 intent.putExtra("id", prestamosList.get(position).getPrestamos().getId());
                 startActivity(intent);
             }
