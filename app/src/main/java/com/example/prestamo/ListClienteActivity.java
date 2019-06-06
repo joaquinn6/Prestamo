@@ -59,6 +59,7 @@ public class ListClienteActivity extends AppCompatActivity {
                 }else if(id==R.id.ibEditar){
                     intent[0] =new Intent(ListClienteActivity.this, MainActivity.class);
                     intent[0].putExtra("indice", clienteList.get(posicion).getCedula());
+                    intent[0].putExtra("lugar", posicion);
                     startActivityForResult(intent[0], 1111);
                 }else if(id==R.id.ibVerPRestamos){
                     intent[0] =new Intent(ListClienteActivity.this, ListPrestamosActivity.class);
@@ -84,9 +85,15 @@ public class ListClienteActivity extends AppCompatActivity {
 
         if (requestCode==1111){
             if(resultCode==RESULT_OK){
-                clienteList.removeAll(clienteList);
-                clienteList.addAll(db.clienteDao().MostrarClientes());
-                adapter.notifyDataSetChanged();
+//                clienteList.removeAll(clienteList);
+//                clienteList.addAll(db.clienteDao().MostrarClientes());
+                Bundle extras =data.getExtras();
+
+                if(extras!=null){
+                    clienteList.set(extras.getInt("lugar"), db.clienteDao().MostrarClientePorId(extras.getString("cedula")));
+                    adapter.notifyDataSetChanged();
+                }
+
             }
         }
     }

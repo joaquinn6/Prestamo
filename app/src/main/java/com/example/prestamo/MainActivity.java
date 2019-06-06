@@ -18,6 +18,7 @@ import com.example.prestamo.obj.Cliente;
 
 public class MainActivity extends AppCompatActivity {
     private String indice="";
+    private int lugar;
     private DbPrestamos db;
     private Cliente actualizar;
     private EditText tvCedula;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(extras!=null){
             indice=extras.getString("indice");
+            lugar=extras.getInt("lugar");
             LlenarCliente();
         }
     }
@@ -89,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     if(txtDireccion.getText().toString().length()==0)
                         txtDireccion.setError("Campo Obligatorio");
                 }else{
+                    Intent intent = new Intent();
                     if(indice.isEmpty()){
                         Cliente nuevo = new Cliente();
                         nuevo.setNombre(txtNombre.getText().toString());
@@ -98,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         nuevo.setCedula(txtCedula.getText().toString());
                         nuevo.setDireccion(txtDireccion.getText().toString());
                         nuevo.setOcupacion(txtOcupacion.getText().toString());
+                        intent.putExtra("nombre", txtNombre.getText().toString());
 
                         try{
                             db.clienteDao().Insertar(nuevo);
@@ -115,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
                         tvCedula.setEnabled(false);
                         try{
                             db.clienteDao().Actualizar(actualizar);
+                            intent.putExtra("cedula",tvCedula.getText().toString());
+                            intent.putExtra("lugar",lugar);
                         }
                         catch (SQLiteConstraintException e){
                             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
@@ -122,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 
-                    Intent intent = new Intent();
-                    intent.putExtra("nombre", txtNombre.getText().toString());
                     setResult(RESULT_OK, intent);
                     finish();
                 }
