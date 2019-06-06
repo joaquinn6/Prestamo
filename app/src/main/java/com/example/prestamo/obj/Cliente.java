@@ -2,26 +2,32 @@ package com.example.prestamo.obj;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity
 public class Cliente {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
     private String nombre;
     private String apelldio;
     private String sexo;
     private String numero;
+    @PrimaryKey() @NonNull
     private String cedula;
     private String ocupacion;
     private String direccion;
 
-    public int getId() {
-        return id;
+    public Cliente() {
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Cliente(String nombre, String apelldio, String sexo, String numero, String cedula, String ocupacion, String direccion) {
+        this.nombre = nombre;
+        this.apelldio = apelldio;
+        this.sexo = sexo;
+        this.numero = numero;
+        this.cedula = cedula;
+        this.ocupacion = ocupacion;
+        this.direccion = direccion;
     }
+
 
     public String getNombre() {
         return nombre;

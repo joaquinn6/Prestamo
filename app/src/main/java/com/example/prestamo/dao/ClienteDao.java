@@ -24,6 +24,6 @@ public interface ClienteDao {
     @Query("select * from cliente")
     List<Cliente> MostrarClientes();
 
-    @Query("select * from cliente where id=:id")
-    Cliente MostrarClientePorId(int id);
+    @Query("select * from cliente where cedula=:id")
+    Cliente MostrarClientePorId(String id);
 }

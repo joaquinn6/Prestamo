@@ -2,6 +2,7 @@ package com.example.prestamo;
 
 import android.arch.persistence.room.Room;
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.prestamo.db.DbPrestamos;
 import com.example.prestamo.obj.Prestamos;
@@ -28,7 +30,7 @@ import java.util.List;
 public class SecondActivity extends AppCompatActivity {
 
     private ArrayAdapter<String> adapter;
-    private int indice;
+    private String indice="";
     private DbPrestamos db;
     public Spinner spClientes;
     public TextView tvMontoPagar;
@@ -54,7 +56,7 @@ public class SecondActivity extends AppCompatActivity {
 
         if(extras!=null) {
             String cli;
-            indice = Integer.parseInt(extras.getString("indice"));
+            indice = extras.getString("indice");
             cli = db.clienteDao().MostrarClientePorId(indice).getNombre() + " " + db.clienteDao().MostrarClientePorId(indice).getApelldio();
             adaptador.add(cli);
             adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, adaptador);
@@ -179,7 +181,6 @@ public class SecondActivity extends AppCompatActivity {
                 if(spClientes.getSelectedItemPosition()!=-1 && txtMontoCredito.getText().toString().length()!=0 && Integer.parseInt(txtMontoCredito.getText().toString())>0){
                     Prestamos nuevo = new Prestamos();
 
-                    nuevo.setNombreCliente(spClientes.getSelectedItem().toString());
                     nuevo.setMonto(Double.parseDouble(txtMontoCredito.getText().toString()));
                     nuevo.setInteres(spInteres.getSelectedItem().toString());
                     nuevo.setPlazo(Integer.parseInt(txtPlazos.getText().toString()));
@@ -187,12 +188,15 @@ public class SecondActivity extends AppCompatActivity {
                     nuevo.setFechaFinal(dtpFechaFinal.getText().toString());
                     nuevo.setMontoPagar(Double.parseDouble(tvMontoPagar.getText().toString()));
                     nuevo.setMontoCuota(Double.parseDouble(tvMontoCuota.getText().toString()));
-                    nuevo.setIdCliente(indice);
-                    db.prestamosDao().Insertar(nuevo);
-
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK, intent);
-                    finish();
+                    nuevo.setCedulaCliente(indice);
+                    try{
+                        db.prestamosDao().Insertar(nuevo);
+                        Intent intent = new Intent();
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }catch (SQLiteConstraintException e){
+                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                    }
                 }else{
                     if(txtMontoCredito.getText().toString().length()==0 || Integer.parseInt(txtMontoCredito.getText().toString())==0)
                         txtMontoCredito.setError("Monto mayor que 0");

@@ -9,7 +9,7 @@ import com.example.prestamo.adapters.AdapPrestamos;
 import com.example.prestamo.db.DbPrestamos;
 
 public class ListPrestamosActivity extends AppCompatActivity {
-    private int indice;
+    private String indice;
     private AdapPrestamos adapPrestamo;
     private DbPrestamos db;
     @Override
@@ -23,10 +23,10 @@ public class ListPrestamosActivity extends AppCompatActivity {
         Bundle extras =getIntent().getExtras();
 
         if(extras!=null){
-            indice=Integer.parseInt(extras.getString("indice"));
-            adapPrestamo= new AdapPrestamos(this, R.layout.item_prestamos, db.prestamosDao().MostrarPrestamosPorId(indice));
+            indice=extras.getString("indice");
+            adapPrestamo= new AdapPrestamos(this, R.layout.item_prestamos, db.prestamosDao().MostrarPojoCedula(indice));
         }else{
-            adapPrestamo = new AdapPrestamos(this, R.layout.item_prestamos, db.prestamosDao().MostrarPrestamos());
+            adapPrestamo = new AdapPrestamos(this, R.layout.item_prestamos, db.prestamosDao().MostrarPojo());
         }
 
         listPrestamos.setAdapter(adapPrestamo);

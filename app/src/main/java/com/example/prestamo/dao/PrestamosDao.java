@@ -7,6 +7,7 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.example.prestamo.obj.Prestamos;
+import com.example.prestamo.pojo.PrestamoConCliente;
 
 import java.util.List;
 
@@ -24,6 +25,12 @@ public interface PrestamosDao {
     @Query("select * from prestamos")
     List<Prestamos> MostrarPrestamos();
 
-    @Query("select * from prestamos where idCliente=:id")
-    List<Prestamos> MostrarPrestamosPorId(int id);
+    @Query("select * from prestamos where cedulaCliente=:id")
+    List<Prestamos> MostrarPrestamosPorId(String id);
+
+    @Query("select * from prestamos inner join cliente on cliente.cedula = prestamos.cedulaCliente")
+    List<PrestamoConCliente> MostrarPojo();
+
+    @Query("select * from prestamos inner join cliente on cliente.cedula = prestamos.cedulaCliente where cedulaCliente=:cedula")
+    List<PrestamoConCliente> MostrarPojoCedula(String cedula);
 }

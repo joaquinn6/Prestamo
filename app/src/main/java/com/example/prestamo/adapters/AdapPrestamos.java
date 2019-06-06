@@ -11,15 +11,16 @@ import android.widget.TextView;
 
 import com.example.prestamo.R;
 import com.example.prestamo.obj.Prestamos;
+import com.example.prestamo.pojo.PrestamoConCliente;
 
 import java.util.List;
 
 public class AdapPrestamos extends ArrayAdapter {
     private Context context;
     private int resource;
-    private List<Prestamos> prestamosList;
+    private List<PrestamoConCliente> prestamosList;
 
-    public AdapPrestamos(@NonNull Context context, int resource, @NonNull List<Prestamos> prestamosList) {
+    public AdapPrestamos(@NonNull Context context, int resource, @NonNull List<PrestamoConCliente> prestamosList) {
         super(context, resource, prestamosList);
         this.context = context;
         this.resource = resource;
@@ -35,9 +36,9 @@ public class AdapPrestamos extends ArrayAdapter {
         TextView tvMonto = v.findViewById(R.id.tvMonto);
         TextView tvCuotas = v.findViewById(R.id.tvCuotas);
 
-        tvNombre.setText(prestamosList.get(position).getNombreCliente());
-        tvMonto.setText(prestamosList.get(position).getMonto().toString());
-        tvCuotas.setText(String.valueOf(prestamosList.get(position).getPlazo()));
+        tvNombre.setText(prestamosList.get(position).getCliente().getNombre()+" "+ prestamosList.get(position).getCliente().getApelldio());
+        tvMonto.setText(prestamosList.get(position).getPrestamos().getMonto().toString());
+        tvCuotas.setText(String.valueOf(prestamosList.get(position).getPrestamos().getPlazo()));
 
 
         return v;

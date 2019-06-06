@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VerClienteActivity extends AppCompatActivity {
-    private int indice=0;
+    private String indice="";
     private DbPrestamos db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class VerClienteActivity extends AppCompatActivity {
         Bundle extras =getIntent().getExtras();
 
         if(extras!=null){
-            indice=Integer.parseInt(extras.getString("indice"));
+            indice=extras.getString("indice");
             LlenarCliente();
         }
     }
@@ -74,7 +74,7 @@ public class VerClienteActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.mnAgregar:
                 Intent intent = new Intent(VerClienteActivity.this, SecondActivity.class);
-                intent.putExtra("indice", String.valueOf(indice));
+                intent.putExtra("indice", indice);
 
                 startActivity(intent);
                 break;

@@ -3,11 +3,13 @@ package com.example.prestamo;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.example.prestamo.adapters.RVAdapCliente;
 import com.example.prestamo.db.DbPrestamos;
@@ -42,9 +44,13 @@ public class ListClienteActivity extends AppCompatActivity {
                     builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            db.clienteDao().Borrar(clienteList.get(posicion));
-                            clienteList.remove(posicion);
-                            adapter.notifyDataSetChanged();
+                            try{
+                                db.clienteDao().Borrar(clienteList.get(posicion));
+                                clienteList.remove(posicion);
+                                adapter.notifyDataSetChanged();
+                            }catch (SQLiteConstraintException e){
+                                Toast.makeText(ListClienteActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
 
@@ -52,15 +58,15 @@ public class ListClienteActivity extends AppCompatActivity {
                     alert.show();
                 }else if(id==R.id.ibEditar){
                     intent[0] =new Intent(ListClienteActivity.this, MainActivity.class);
-                    intent[0].putExtra("indice", String.valueOf(clienteList.get(posicion).getId()));
+                    intent[0].putExtra("indice", clienteList.get(posicion).getCedula());
                     startActivityForResult(intent[0], 1111);
                 }else if(id==R.id.ibVerPRestamos){
                     intent[0] =new Intent(ListClienteActivity.this, ListPrestamosActivity.class);
-                    intent[0].putExtra("indice", String.valueOf(clienteList.get(posicion).getId()));
+                    intent[0].putExtra("indice", clienteList.get(posicion).getCedula());
                     startActivity(intent[0]);
                 }else{
                     intent[0] =new Intent(ListClienteActivity.this, VerClienteActivity.class);
-                    intent[0].putExtra("indice", String.valueOf(clienteList.get(posicion).getId()));
+                    intent[0].putExtra("indice", clienteList.get(posicion).getCedula());
                     startActivity(intent[0]);
                 }
             }

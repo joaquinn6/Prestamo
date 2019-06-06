@@ -3,6 +3,7 @@ package com.example.prestamo;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,14 +11,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.prestamo.db.DbPrestamos;
 import com.example.prestamo.obj.Cliente;
 
 public class MainActivity extends AppCompatActivity {
-    private int indice=-1;
+    private String indice="";
     private DbPrestamos db;
     private Cliente actualizar;
+    private EditText tvCedula;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +31,10 @@ public class MainActivity extends AppCompatActivity {
 
         db= Room.databaseBuilder(getApplicationContext(), DbPrestamos.class, "prestamos").allowMainThreadQueries().build();
         Bundle extras =getIntent().getExtras();
+        tvCedula= findViewById(R.id.etCedula);
 
         if(extras!=null){
-            indice=Integer.parseInt(extras.getString("indice"));
+            indice=extras.getString("indice");
             LlenarCliente();
         }
     }
@@ -40,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         EditText tvApellido= findViewById(R.id.etApellido);
         Spinner tvSexo= findViewById(R.id.spinner);
         EditText tvTelefono = findViewById(R.id.etTelefono);
-        EditText tvCedula= findViewById(R.id.etCedula);
         EditText tvOcupacion= findViewById(R.id.etOcupacion);
         EditText tvDireccion= findViewById(R.id.etDireccion);
 
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     if(txtDireccion.getText().toString().length()==0)
                         txtDireccion.setError("Campo Obligatorio");
                 }else{
-                    if(indice==-1){
+                    if(indice.isEmpty()){
                         Cliente nuevo = new Cliente();
                         nuevo.setNombre(txtNombre.getText().toString());
                         nuevo.setApelldio(txtApellido.getText().toString());
@@ -96,17 +99,27 @@ public class MainActivity extends AppCompatActivity {
                         nuevo.setDireccion(txtDireccion.getText().toString());
                         nuevo.setOcupacion(txtOcupacion.getText().toString());
 
-                        db.clienteDao().Insertar(nuevo);
+                        try{
+                            db.clienteDao().Insertar(nuevo);
+                        }
+                        catch (SQLiteConstraintException e){
+                            Toast.makeText(this, "NO se puedo ingresar", Toast.LENGTH_SHORT).show();
+                        }
                     }else{
                         actualizar.setNombre(txtNombre.getText().toString());
                         actualizar.setApelldio(txtApellido.getText().toString());
                         actualizar.setSexo(spSexo.getSelectedItem().toString());
                         actualizar.setNumero(txtTelefono.getText().toString());
-                        actualizar.setCedula(txtCedula.getText().toString());
                         actualizar.setDireccion(txtDireccion.getText().toString());
                         actualizar.setOcupacion(txtOcupacion.getText().toString());
+                        tvCedula.setEnabled(false);
+                        try{
+                            db.clienteDao().Actualizar(actualizar);
+                        }
+                        catch (SQLiteConstraintException e){
+                            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                        }
 
-                        db.clienteDao().Actualizar(actualizar);
                     }
 
                     Intent intent = new Intent();
