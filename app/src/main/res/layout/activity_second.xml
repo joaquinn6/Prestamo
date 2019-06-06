@@ -180,11 +180,11 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView17"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tvMontoCuota"
+        app:layout_constraintStart_toStartOf="@+id/tvMontoPagado"
         app:layout_constraintTop_toBottomOf="@+id/MontoaPagar" />
 
     <TextView
-        android:id="@+id/tvMontoCuota"
+        android:id="@+id/tvMontoPagado"
         android:layout_width="0dp"
         android:layout_height="43dp"
         android:layout_marginStart="8dp"

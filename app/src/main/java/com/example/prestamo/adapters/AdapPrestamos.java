@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.prestamo.R;
-import com.example.prestamo.obj.Prestamos;
 import com.example.prestamo.pojo.PrestamoConCliente;
 
 import java.util.List;

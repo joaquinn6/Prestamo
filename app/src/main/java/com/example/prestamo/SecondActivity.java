@@ -72,7 +72,7 @@ public class SecondActivity extends AppCompatActivity {
 //            }
 //        }
         tvMontoPagar = findViewById(R.id.tvMontoPagar);
-        tvMontoCuota = findViewById(R.id.tvMontoCuota);
+        tvMontoCuota = findViewById(R.id.tvMontoPagado);
         dtpFecha = findViewById(R.id.etFecha);
         dtpFechaFinal = findViewById(R.id.etFechaFinal);
         Calendar now= Calendar.getInstance();
@@ -135,7 +135,7 @@ public class SecondActivity extends AppCompatActivity {
         Spinner spInteres = findViewById(R.id.spInteres);
 
         TextView tvMonto = findViewById(R.id.tvMontoPagar);
-        TextView tvPlazo = findViewById(R.id.tvMontoCuota);
+        TextView tvPlazo = findViewById(R.id.tvMontoPagado);
 
         int plazo=1;
         int interes = Integer.valueOf(spInteres.getSelectedItem().toString());

@@ -1,17 +1,26 @@
 package com.example.prestamo;
 
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.prestamo.adapters.AdapPrestamos;
 import com.example.prestamo.db.DbPrestamos;
+import com.example.prestamo.obj.Prestamos;
+import com.example.prestamo.pojo.PrestamoConCliente;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListPrestamosActivity extends AppCompatActivity {
     private String indice;
     private AdapPrestamos adapPrestamo;
     private DbPrestamos db;
+    private List<PrestamoConCliente> prestamosList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,11 +33,23 @@ public class ListPrestamosActivity extends AppCompatActivity {
 
         if(extras!=null){
             indice=extras.getString("indice");
-            adapPrestamo= new AdapPrestamos(this, R.layout.item_prestamos, db.prestamosDao().MostrarPojoCedula(indice));
+            prestamosList.addAll(db.prestamosDao().MostrarPojoCedula(indice));
+            adapPrestamo= new AdapPrestamos(this, R.layout.item_prestamos, prestamosList);
         }else{
-            adapPrestamo = new AdapPrestamos(this, R.layout.item_prestamos, db.prestamosDao().MostrarPojo());
+            prestamosList.addAll(db.prestamosDao().MostrarPojo());
+            adapPrestamo = new AdapPrestamos(this, R.layout.item_prestamos, prestamosList);
         }
 
         listPrestamos.setAdapter(adapPrestamo);
+
+        listPrestamos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Intent intent = new Intent(ListPrestamosActivity.this,VerPrestamosActivity.class);
+                intent.putExtra("indice", prestamosList.get(position).getCliente().getCedula());
+                intent.putExtra("id", prestamosList.get(position).getPrestamos().getId());
+                startActivity(intent);
+            }
+        });
     }
 }
