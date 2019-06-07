@@ -1,6 +1,5 @@
 package com.example.prestamo;
 
-import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
 import android.support.v7.app.ActionBar;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 
 import com.example.prestamo.db.DbPrestamos;
 import com.example.prestamo.obj.Prestamos;
-import com.example.prestamo.obj.Cliente;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +29,6 @@ public class SecondActivity extends AppCompatActivity {
 
     private ArrayAdapter<String> adapter;
     private String indice="";
-    private DbPrestamos db;
     public Spinner spClientes;
     public TextView tvMontoPagar;
     public TextView tvMontoCuota;
@@ -47,8 +44,6 @@ public class SecondActivity extends AppCompatActivity {
         ActionBar bar = getSupportActionBar();
         bar.setSubtitle("Ingresar Credito");
 
-        db= Room.databaseBuilder(getApplicationContext(), DbPrestamos.class, "prestamos").allowMainThreadQueries().build();
-
         setContentView(R.layout.activity_second);
         spClientes = findViewById(R.id.spUsuarios);
         Bundle extras =getIntent().getExtras();
@@ -57,20 +52,11 @@ public class SecondActivity extends AppCompatActivity {
         if(extras!=null) {
             String cli;
             indice = extras.getString("indice");
-            cli = db.clienteDao().MostrarClientePorId(indice).getNombre() + " " + db.clienteDao().MostrarClientePorId(indice).getApelldio();
+            cli = DbPrestamos.getAppDatabase(this).clienteDao().MostrarClientePorId(indice).getNombre() + " " + DbPrestamos.getAppDatabase(this).clienteDao().MostrarClientePorId(indice).getApelldio();
             adaptador.add(cli);
             adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, adaptador);
             spClientes.setAdapter(adapter);
         }
-            //        else{
-//            if(Datos.clientes.size()>0){
-//                for (Cliente x: Datos.clientes){
-//                    adaptador.add(x.getNombre());
-//                }
-//                adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, adaptador);
-//                spClientes.setAdapter(adapter);
-//            }
-//        }
         tvMontoPagar = findViewById(R.id.tvMontoPagar);
         tvMontoCuota = findViewById(R.id.tvMontoPagado);
         dtpFecha = findViewById(R.id.etFecha);
@@ -190,7 +176,7 @@ public class SecondActivity extends AppCompatActivity {
                     nuevo.setMontoCuota(Double.parseDouble(tvMontoCuota.getText().toString()));
                     nuevo.setCedulaCliente(indice);
                     try{
-                        db.prestamosDao().Insertar(nuevo);
+                        DbPrestamos.getAppDatabase(this).prestamosDao().Insertar(nuevo);
                         Intent intent = new Intent();
                         setResult(RESULT_OK, intent);
                         finish();

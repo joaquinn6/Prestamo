@@ -1,7 +1,5 @@
 package com.example.prestamo;
 
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
 import android.support.v7.app.ActionBar;
@@ -19,7 +17,6 @@ import com.example.prestamo.obj.Cliente;
 public class MainActivity extends AppCompatActivity {
     private String indice="";
     private int lugar;
-    private DbPrestamos db;
     private Cliente actualizar;
     private EditText tvCedula;
     @Override
@@ -30,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         ActionBar bar = getSupportActionBar();
         bar.setSubtitle("Ingresar Cliente");
 
-        db= Room.databaseBuilder(getApplicationContext(), DbPrestamos.class, "prestamos").allowMainThreadQueries().build();
         Bundle extras =getIntent().getExtras();
         tvCedula= findViewById(R.id.etCedula);
 
@@ -49,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         EditText tvOcupacion= findViewById(R.id.etOcupacion);
         EditText tvDireccion= findViewById(R.id.etDireccion);
 
-        actualizar=db.clienteDao().MostrarClientePorId(indice);
+        actualizar=DbPrestamos.getAppDatabase(this).clienteDao().MostrarClientePorId(indice);
         tvNombre.setText(actualizar.getNombre());
         tvApellido.setText(actualizar.getApelldio());
         if(actualizar.getSexo().equals("Femenino"))
@@ -104,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("nombre", txtNombre.getText().toString());
 
                         try{
-                            db.clienteDao().Insertar(nuevo);
+                            DbPrestamos.getAppDatabase(this).clienteDao().Insertar(nuevo);
                         }
                         catch (SQLiteConstraintException e){
                             Toast.makeText(this, "NO se puedo ingresar", Toast.LENGTH_SHORT).show();
@@ -118,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         actualizar.setOcupacion(txtOcupacion.getText().toString());
                         tvCedula.setEnabled(false);
                         try{
-                            db.clienteDao().Actualizar(actualizar);
+                            DbPrestamos.getAppDatabase(this).clienteDao().Actualizar(actualizar);
                             intent.putExtra("cedula",tvCedula.getText().toString());
                             intent.putExtra("lugar",lugar);
                         }

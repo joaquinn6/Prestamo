@@ -1,26 +1,19 @@
 package com.example.prestamo;
 
-import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.prestamo.db.DbPrestamos;
 import com.example.prestamo.obj.Cliente;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class VerClienteActivity extends AppCompatActivity {
     private String indice="";
-    private DbPrestamos db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,9 +23,6 @@ public class VerClienteActivity extends AppCompatActivity {
         bar.setSubtitle("Ver Cliente");
 
         setContentView(R.layout.activity_ver_cliente);
-
-        db= Room.databaseBuilder(getApplicationContext(), DbPrestamos.class, "prestamos").allowMainThreadQueries().build();
-
 
         Bundle extras =getIntent().getExtras();
 
@@ -51,7 +41,7 @@ public class VerClienteActivity extends AppCompatActivity {
         TextView tvOcupacion= findViewById(R.id.etOcupacion);
         TextView tvDireccion= findViewById(R.id.etDireccion);
 
-        Cliente cliente = db.clienteDao().MostrarClientePorId(indice);
+        Cliente cliente = DbPrestamos.getAppDatabase(this).clienteDao().MostrarClientePorId(indice);
 
         tvNombre.setText(cliente.getNombre());
         tvApellido.setText(cliente.getApelldio());

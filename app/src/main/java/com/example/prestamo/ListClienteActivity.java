@@ -1,6 +1,5 @@
 package com.example.prestamo;
 
-import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
@@ -22,7 +21,6 @@ public class ListClienteActivity extends AppCompatActivity {
 
     private RVAdapCliente adapter;
     private List<Cliente> clienteList= new ArrayList<>();
-    private DbPrestamos db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +28,7 @@ public class ListClienteActivity extends AppCompatActivity {
         final Intent[] intent = new Intent[1];
         RecyclerView rvCliente = findViewById(R.id.rvClientes);
 
-        db= Room.databaseBuilder(getApplicationContext(), DbPrestamos.class, "prestamos").allowMainThreadQueries().build();
-        clienteList.addAll(db.clienteDao().MostrarClientes());
+        clienteList.addAll(DbPrestamos.getAppDatabase(this).clienteDao().MostrarClientes());
 
         RVAdapCliente.OnItemClickListener onItemClickListener = new RVAdapCliente.OnItemClickListener() {
             @Override
@@ -45,7 +42,7 @@ public class ListClienteActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             try{
-                                db.clienteDao().Borrar(clienteList.get(posicion));
+                                DbPrestamos.getAppDatabase(ListClienteActivity.this).clienteDao().Borrar(clienteList.get(posicion));
                                 clienteList.remove(posicion);
                                 adapter.notifyDataSetChanged();
                             }catch (SQLiteConstraintException e){
@@ -85,12 +82,10 @@ public class ListClienteActivity extends AppCompatActivity {
 
         if (requestCode==1111){
             if(resultCode==RESULT_OK){
-//                clienteList.removeAll(clienteList);
-//                clienteList.addAll(db.clienteDao().MostrarClientes());
                 Bundle extras =data.getExtras();
 
                 if(extras!=null){
-                    clienteList.set(extras.getInt("lugar"), db.clienteDao().MostrarClientePorId(extras.getString("cedula")));
+                    clienteList.set(extras.getInt("lugar"), DbPrestamos.getAppDatabase(this).clienteDao().MostrarClientePorId(extras.getString("cedula")));
                     adapter.notifyDataSetChanged();
                 }
 

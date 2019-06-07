@@ -14,11 +14,6 @@ public class Pago {
     @ForeignKey(entity = Prestamos.class, parentColumns = "id", childColumns = "idPrestamo", onDelete = CASCADE, onUpdate = CASCADE)
     private int idPrestamo;
 
-    public Pago(int id, float monto, int idPrestamo) {
-        this.id = id;
-        this.monto = monto;
-        this.idPrestamo = idPrestamo;
-    }
 
     public Pago() {
     }

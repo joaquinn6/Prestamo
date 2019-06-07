@@ -1,6 +1,5 @@
 package com.example.prestamo;
 
-import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteConstraintException;
 import android.support.v7.app.ActionBar;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,14 +20,10 @@ import com.example.prestamo.db.DbPrestamos;
 import com.example.prestamo.obj.Pago;
 import com.example.prestamo.pojo.PrestamoConClienteConPagos;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class VerPrestamosActivity extends AppCompatActivity {
     private int id=0;
     private PrestamoConClienteConPagos prestamoConClienteConPagos=new PrestamoConClienteConPagos();
-    private DbPrestamos db;
     private AdapPago adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +32,11 @@ public class VerPrestamosActivity extends AppCompatActivity {
         bar.setSubtitle("Ver Prestamo");
         setContentView(R.layout.activity_ver_prestamos);
 
-        db= Room.databaseBuilder(getApplicationContext(), DbPrestamos.class, "prestamos").allowMainThreadQueries().build();
-
         Bundle extras =getIntent().getExtras();
         ListView lvPagos = findViewById(R.id.lvPagos);
         if(extras!=null){
             id=extras.getInt("id");
-            prestamoConClienteConPagos=db.prestamosDao().MostrarPojoTodo(id);
+            prestamoConClienteConPagos=DbPrestamos.getAppDatabase(this).prestamosDao().MostrarPojoTodo(id);
             llenarPrestamo();
             adapter= new AdapPago(this, R.layout.item_pago, prestamoConClienteConPagos.getPagoList());
             lvPagos.setAdapter(adapter);
@@ -104,7 +96,7 @@ public class VerPrestamosActivity extends AppCompatActivity {
                         pago.setMonto(Float.parseFloat(etCantidad.getText().toString()));
                         pago.setIdPrestamo(prestamoConClienteConPagos.getPrestamos().getId());
                         try {
-                            db.pagoDao().Insertar(pago);
+                            DbPrestamos.getAppDatabase(VerPrestamosActivity.this).pagoDao().Insertar(pago);
                             prestamoConClienteConPagos.getPagoList().add(pago);
                             adapter.notifyDataSetChanged();
                             calcularPago();
