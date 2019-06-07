@@ -82,18 +82,26 @@ public class VerPrestamosActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.mnAgregar:
-                AlertDialog.Builder builder = new AlertDialog.Builder(VerPrestamosActivity.this);
-                builder.setTitle("Pago");
-                final View view = LayoutInflater.from(VerPrestamosActivity.this).inflate(R.layout.dialog_pago, null, false);
-                builder.setView(view);
-                builder.setNegativeButton("Cancelar", null);
+                TextView montoPagado= findViewById(R.id.tvMontoPagado);
+                final TextView montoApagar = findViewById(R.id.tvMontoPagar);
+                if(Float.parseFloat(montoApagar.getText().toString())>Float.parseFloat(montoPagado.getText().toString())){
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(VerPrestamosActivity.this);
+                    builder.setTitle("Pago");
+                    final View view = LayoutInflater.from(VerPrestamosActivity.this).inflate(R.layout.dialog_pago, null, false);
+                    builder.setView(view);
+                    builder.setNegativeButton("Cancelar", null);
                 builder.setPositiveButton("guardar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         EditText etCantidad= view.findViewById(R.id.etCantidad);
 
                         Pago pago= new Pago();
-                        pago.setMonto(Float.parseFloat(etCantidad.getText().toString()));
+                        if(calcular()+Float.parseFloat(etCantidad.getText().toString()) >Float.parseFloat(montoApagar.getText().toString())){
+                            pago.setMonto(Float.parseFloat(etCantidad.getText().toString())-((calcular()+Float.parseFloat(etCantidad.getText().toString()))- Float.parseFloat(montoApagar.getText().toString())));
+                        }else{
+                            pago.setMonto(Float.parseFloat(etCantidad.getText().toString()));
+                        }
                         pago.setIdPrestamo(prestamoConClienteConPagos.getPrestamos().getId());
                         try {
                             DbPrestamos.getAppDatabase(VerPrestamosActivity.this).pagoDao().Insertar(pago);
@@ -107,6 +115,10 @@ public class VerPrestamosActivity extends AppCompatActivity {
                 });
                 AlertDialog dialog = builder.create();
                 dialog.show();
+                }else{
+                    Toast.makeText(this, "Monto ya pagado", Toast.LENGTH_SHORT).show();
+                }
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -122,5 +134,20 @@ public class VerPrestamosActivity extends AppCompatActivity {
             }
             tvMontoCuota.setText(String.valueOf(total));
         }
+    }
+
+    public float calcular(){
+        TextView tvMontoCuota = findViewById(R.id.tvMontoPagado);
+        float total=0;
+        if(prestamoConClienteConPagos.getPagoList().size()==0) {
+            tvMontoCuota.setText("0.0");
+        }
+        else{
+            for (int i=0; i<prestamoConClienteConPagos.getPagoList().size(); i++){
+                total+=prestamoConClienteConPagos.getPagoList().get(i).getMonto();
+            }
+
+        }
+        return total;
     }
 }
